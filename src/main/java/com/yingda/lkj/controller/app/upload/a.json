@@ -1,0 +1,30 @@
+[
+  {
+    "addTime": "2021-04-30 04:37:58",
+    "id": "dddb3309-42be-4c65-bfe9-13def1abb77a",
+    "leftStationId": "e651cee4-0902-448c-9574-9cba0f9dd0be",
+    "leftStationName": "五家",
+    "measureDistance": 0.0,
+    "measureMode": 0,
+    "name": "dot",
+    "opcLocation": "车站",
+    "opcTypeId": "2",
+    "orientation": 0,
+    "state": 1,
+    "updateTime": "2021-04-30 04:37:58"
+  },
+  {
+    "addTime": "2021-04-30 04:38:14",
+    "id": "d42a7a3a-167f-4c00-bfb6-7bc6f05dfe69",
+    "leftStationId": "0a8b8f26-3320-4972-9297-de7276127bfd",
+    "leftStationName": "哈尔滨西",
+    "measureDistance": 0.0,
+    "measureMode": 1,
+    "name": "track",
+    "opcLocation": "车站",
+    "opcTypeId": "2",
+    "orientation": 0,
+    "state": 1,
+    "updateTime": "2021-04-30 04:38:14"
+  }
+]
