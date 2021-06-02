@@ -21,7 +21,7 @@ public class JWTUtil {
 
     // 过期时间 18h
     private static final long EXPIRE_TIME = 18 * 3600L * 1000;
-//    private static final long EXPIRE_TIME = 100L;
+//    private static final long EXPIRE_TIME = 10L;
     // 密钥
     private static final String SECRET = "gongshenhuoerdi"; // 公审霍尔蒂，建设匈牙利
 
