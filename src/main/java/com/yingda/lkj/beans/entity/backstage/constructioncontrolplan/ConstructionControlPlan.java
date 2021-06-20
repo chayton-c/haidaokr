@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "construction_control_plan", schema = "opc_measurement", catalog = "")
+@Table(name = "construction_control_plan")
 public class ConstructionControlPlan {
     // processStatus 方案流程
     public static final byte PENDING_SUBMIT = 0; // 待提交

@@ -52,7 +52,6 @@ public class User implements Serializable {
     private String workAreaName;
     private String roleName;
     private String token;
-    private String akagi;
 
     public User() {
     }
