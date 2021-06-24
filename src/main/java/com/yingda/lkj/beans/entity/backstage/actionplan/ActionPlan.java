@@ -8,8 +8,12 @@ import java.util.Objects;
  * 行动计划主表
  */
 @Entity
-@Table(name = "action_plan", schema = "opc_measurement", catalog = "")
+@Table(name = "action_plan", schema = "okr_haida", catalog = "")
 public class ActionPlan {
+    // submitStatus
+    public static final byte PENDING_SUBMIT = 0;
+    public static final byte SUBMITTED = 1;
+
     // finishedStatus
     public static final byte PENDING_START = 0;
     public static final byte PROCESSING = 1;
@@ -36,11 +40,17 @@ public class ActionPlan {
     private Timestamp planEndTime;
     private Timestamp actualStartTime; // 实际开始时间
     private Timestamp actualEndTime; // 实际结束时间
+    private byte submitStatus; // 提交状态（未提交的不统计）
     private byte finishedStatus; // 完成状态
     private byte abolishedStatus; // 废止状态
     private byte historicalStatus; // 历史状态，计划变更时候，会新建一个状态为NOT_HISTORICAL的计划，并把被变更的计划状态置为HISTORICAL
     private Timestamp addTime;
     private Timestamp updateTime;
+
+    // pageFields
+    private String executorName;
+    private String executorRoleName;
+    private String executorOrganizationName;
 
     @Id
     @Column(name = "id", nullable = false, length = 36)
@@ -222,17 +232,56 @@ public class ActionPlan {
         this.updateTime = updateTime;
     }
 
+
+    @Transient
+    public String getExecutorName() {
+        return executorName;
+    }
+
+    public void setExecutorName(String executorName) {
+        this.executorName = executorName;
+    }
+
+    @Transient
+    public String getExecutorRoleName() {
+        return executorRoleName;
+    }
+
+    public void setExecutorRoleName(String executorRoleName) {
+        this.executorRoleName = executorRoleName;
+    }
+
+    @Transient
+    public String getExecutorOrganizationName() {
+        return executorOrganizationName;
+    }
+
+    public void setExecutorOrganizationName(String executorOrganizationName) {
+        this.executorOrganizationName = executorOrganizationName;
+    }
+
+    @Basic
+    @Column(name = "submit_status", nullable = false)
+    public byte getSubmitStatus() {
+        return submitStatus;
+    }
+
+    public void setSubmitStatus(byte submitStatus) {
+        this.submitStatus = submitStatus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ActionPlan that = (ActionPlan) o;
-        return finishedStatus == that.finishedStatus && abolishedStatus == that.abolishedStatus && historicalStatus == that.historicalStatus && Objects.equals(id, that.id) && Objects.equals(actionPlanGroupId, that.actionPlanGroupId) && Objects.equals(organizationId, that.organizationId) && Objects.equals(executeUserId, that.executeUserId) && Objects.equals(name, that.name) && Objects.equals(origin, that.origin) && Objects.equals(client, that.client) && Objects.equals(purpose, that.purpose) && Objects.equals(target, that.target) && Objects.equals(planStartTime, that.planStartTime) && Objects.equals(planEndTime, that.planEndTime) && Objects.equals(actualStartTime, that.actualStartTime) && Objects.equals(actualEndTime, that.actualEndTime) && Objects.equals(addTime, that.addTime) && Objects.equals(updateTime, that.updateTime);
+        return submitStatus == that.submitStatus && finishedStatus == that.finishedStatus && abolishedStatus == that.abolishedStatus && historicalStatus == that.historicalStatus && Objects.equals(id, that.id) && Objects.equals(actionPlanGroupId, that.actionPlanGroupId) && Objects.equals(organizationId, that.organizationId) && Objects.equals(executeUserId, that.executeUserId) && Objects.equals(name, that.name) && Objects.equals(origin, that.origin) && Objects.equals(client, that.client) && Objects.equals(purpose, that.purpose) && Objects.equals(target, that.target) && Objects.equals(planStartTime, that.planStartTime) && Objects.equals(planEndTime, that.planEndTime) && Objects.equals(actualStartTime, that.actualStartTime) && Objects.equals(actualEndTime, that.actualEndTime) && Objects.equals(addTime, that.addTime) && Objects.equals(updateTime, that.updateTime) && Objects.equals(executorName, that.executorName) && Objects.equals(executorRoleName, that.executorRoleName) && Objects.equals(executorOrganizationName, that.executorOrganizationName);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, actionPlanGroupId, organizationId, executeUserId, name, origin, client, purpose, target, planStartTime,
-                planEndTime, actualStartTime, actualEndTime, finishedStatus, abolishedStatus, historicalStatus, addTime, updateTime);
+                planEndTime, actualStartTime, actualEndTime, submitStatus, finishedStatus, abolishedStatus, historicalStatus, addTime,
+                updateTime, executorName, executorRoleName, executorOrganizationName);
     }
 }

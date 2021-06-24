@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "action_plan_secondary_node", schema = "opc_measurement", catalog = "")
+@Table(name = "action_plan_secondary_node", schema = "okr_haida", catalog = "")
 public class ActionPlanSecondaryNode {
     private String id;
     private String name;
@@ -20,7 +20,13 @@ public class ActionPlanSecondaryNode {
     private Timestamp actualStartTime;
     private Timestamp actualEndTime;
     private String completionDescription; // 完成情况描述
-    private String finishedStatus;
+    private byte finishedStatus;
+    private String actionPlanId;
+    private String actionPlanPrimaryNodeId;
+
+    // pageField
+    private String principalName; // 责任人
+    private String checkerName; // 检查人
 
     @Id
     @Column(name = "id", nullable = false, length = 36)
@@ -153,12 +159,12 @@ public class ActionPlanSecondaryNode {
     }
 
     @Basic
-    @Column(name = "finished_status", nullable = false, length = 255)
-    public String getFinishedStatus() {
+    @Column(name = "finished_status", nullable = false)
+    public byte getFinishedStatus() {
         return finishedStatus;
     }
 
-    public void setFinishedStatus(String finishedStatus) {
+    public void setFinishedStatus(byte finishedStatus) {
         this.finishedStatus = finishedStatus;
     }
 
@@ -167,13 +173,48 @@ public class ActionPlanSecondaryNode {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ActionPlanSecondaryNode that = (ActionPlanSecondaryNode) o;
-        return seq == that.seq && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(planDescription,
-                that.planDescription) && Objects.equals(actionInput, that.actionInput) && Objects.equals(actionOutput, that.actionOutput) && Objects.equals(planStartTime, that.planStartTime) && Objects.equals(planEndTime, that.planEndTime) && Objects.equals(principalId, that.principalId) && Objects.equals(checkerId, that.checkerId) && Objects.equals(actualStartTime, that.actualStartTime) && Objects.equals(actualEndTime, that.actualEndTime) && Objects.equals(completionDescription, that.completionDescription) && Objects.equals(finishedStatus, that.finishedStatus);
+        return seq == that.seq && finishedStatus == that.finishedStatus && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(planDescription, that.planDescription) && Objects.equals(actionInput, that.actionInput) && Objects.equals(actionOutput, that.actionOutput) && Objects.equals(planStartTime, that.planStartTime) && Objects.equals(planEndTime, that.planEndTime) && Objects.equals(principalId, that.principalId) && Objects.equals(checkerId, that.checkerId) && Objects.equals(actualStartTime, that.actualStartTime) && Objects.equals(actualEndTime, that.actualEndTime) && Objects.equals(completionDescription, that.completionDescription);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, planDescription, actionInput, actionOutput, planStartTime, planEndTime, seq, principalId, checkerId
-                , actualStartTime, actualEndTime, completionDescription, finishedStatus);
+        return Objects.hash(id, actionInput, actionOutput, actualEndTime, actualStartTime, checkerId, completionDescription,
+                finishedStatus, name, planDescription, planEndTime, planStartTime, principalId, seq);
+    }
+
+    @Basic
+    @Column(name = "action_plan_id", nullable = false, length = 36)
+    public String getActionPlanId() {
+        return actionPlanId;
+    }
+
+    public void setActionPlanId(String actionPlanId) {
+        this.actionPlanId = actionPlanId;
+    }
+
+    @Basic
+    @Column(name = "action_plan_primary_node_id", nullable = false, length = 36)
+    public String getActionPlanPrimaryNodeId() {
+        return actionPlanPrimaryNodeId;
+    }
+
+    public void setActionPlanPrimaryNodeId(String actionPlanPrimaryNodeId) {
+        this.actionPlanPrimaryNodeId = actionPlanPrimaryNodeId;
+    }
+
+    public String getPrincipalName() {
+        return principalName;
+    }
+
+    public void setPrincipalName(String principalName) {
+        this.principalName = principalName;
+    }
+
+    public String getCheckerName() {
+        return checkerName;
+    }
+
+    public void setCheckerName(String checkerName) {
+        this.checkerName = checkerName;
     }
 }

@@ -5,13 +5,14 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "action_plan_primary_node", schema = "opc_measurement", catalog = "")
+@Table(name = "action_plan_primary_node", schema = "okr_haida", catalog = "")
 public class ActionPlanPrimaryNode {
     private String id;
     private String name;
     private int seq;
     private Timestamp addTime;
     private Timestamp updateTime;
+    private String actionPlanId;
 
     @Id
     @Column(name = "id", nullable = false, length = 36)
@@ -74,5 +75,15 @@ public class ActionPlanPrimaryNode {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, seq, addTime, updateTime);
+    }
+
+    @Basic
+    @Column(name = "action_plan_id", nullable = false, length = 36)
+    public String getActionPlanId() {
+        return actionPlanId;
+    }
+
+    public void setActionPlanId(String actionPlanId) {
+        this.actionPlanId = actionPlanId;
     }
 }
