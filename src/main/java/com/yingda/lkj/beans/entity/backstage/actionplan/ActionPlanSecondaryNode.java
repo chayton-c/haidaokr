@@ -8,7 +8,10 @@ import java.util.Objects;
 @Table(name = "action_plan_secondary_node", schema = "okr_haida", catalog = "")
 public class ActionPlanSecondaryNode {
     private String id;
+    private String actionPlanId;
+    private String actionPlanPrimaryNodeId;
     private String name;
+    private byte milestoneNode; // 是里程碑节点
     private String planDescription; // 活动描述
     private String actionInput; // 输入
     private String actionOutput; // 输出（完成标志）
@@ -21,8 +24,8 @@ public class ActionPlanSecondaryNode {
     private Timestamp actualEndTime;
     private String completionDescription; // 完成情况描述
     private byte finishedStatus;
-    private String actionPlanId;
-    private String actionPlanPrimaryNodeId;
+    private Timestamp addTime;
+    private Timestamp updateTime;
 
     // pageField
     private String principalName; // 责任人
@@ -202,6 +205,7 @@ public class ActionPlanSecondaryNode {
         this.actionPlanPrimaryNodeId = actionPlanPrimaryNodeId;
     }
 
+    @Transient
     public String getPrincipalName() {
         return principalName;
     }
@@ -210,11 +214,42 @@ public class ActionPlanSecondaryNode {
         this.principalName = principalName;
     }
 
+    @Transient
     public String getCheckerName() {
         return checkerName;
     }
 
     public void setCheckerName(String checkerName) {
         this.checkerName = checkerName;
+    }
+
+    @Basic
+    @Column(name = "add_time", nullable = true)
+    public Timestamp getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Timestamp addTime) {
+        this.addTime = addTime;
+    }
+
+    @Basic
+    @Column(name = "update_time", nullable = true)
+    public Timestamp getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Timestamp updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    @Basic
+    @Column(name = "milestone_node", nullable = false)
+    public byte getMilestoneNode() {
+        return milestoneNode;
+    }
+
+    public void setMilestoneNode(byte milestoneNode) {
+        this.milestoneNode = milestoneNode;
     }
 }

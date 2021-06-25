@@ -132,12 +132,12 @@ public class EnterpriseWeChatClient {
                    "news" : {
                        "articles" : [
                            {
-                               "title" : "中秋节礼品领取",
-                               "description" : "今年中秋节公司有豪礼相送",
-                               "url" : "https://work.weixin.qq.com/api/doc/90000/90135/90236#%E6%96%87%E6%9C%AC%E6%B6%88%E6%81%AF",
-                               "picurl" : "http://res.mail.qq.com/node/ww/wwopenmng/images/independent/doc/test_pic_msg1.png"
+                               "title" : "行动计划提醒",
+                               "description" : "您负责的计划：装修八楼房产办公区 正在进行中，当前执行节点1.1：把握装修需求",
+                               "url" : "http://192.168.249.144:4200/#/action-plan/detail?id=dac0a82a-3382-4fe7-9b10-a279f85971c1",
+                               "picurl" : "https://img0.baidu.com/it/u=3417145962,2237342128&fm=26&fmt=auto&gp=0.jpg"
                            }
-                                ]
+                       ]
                    },
                    "enable_id_trans": 0,
                    "enable_duplicate_check": 0,

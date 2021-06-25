@@ -23,8 +23,10 @@ public interface OrganizationClientService {
      */
     Organization getParentTree(Organization organization);
 
+    List<Organization> getByParentId(String parentId);
+
     /**
-     * 获取下级(局找段，段找车间。。。)
+     * 获取下级(局找段，段找车间。。。)，递归到底层
      */
     List<Organization> getSlaves(String masterId);
 

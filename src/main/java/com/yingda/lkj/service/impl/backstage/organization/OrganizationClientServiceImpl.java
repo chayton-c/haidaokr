@@ -30,6 +30,12 @@ public class OrganizationClientServiceImpl implements OrganizationClientService 
     }
 
     @Override
+    public List<Organization> getByParentId(String parentId) {
+        List<Organization> organizations = organizationService.showDown();
+        return organizations.stream().filter(x -> x.getParentId().equals(parentId)).collect(Collectors.toList());
+    }
+
+    @Override
     public List<Organization> getSlaves(String masterId) {
         List<Organization> organizations = organizationService.showDown();
         List<Organization> slaves = organizations.stream().filter(x -> x.getParentId().equals(masterId)).collect(Collectors.toList());

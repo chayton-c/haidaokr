@@ -45,7 +45,7 @@ public class ActionPlanPrimaryNodeService {
 
     public List<ActionPlanPrimaryNode> getByActionPlanId(String actionPlanId) {
         return actionPlanPrimaryNodeBaseDao.find(
-                "from ActionPlanPrimaryNode where actionPlanId = :actionPlanId",
+                "from ActionPlanPrimaryNode where actionPlanId = :actionPlanId order by seq",
                 Map.of("actionPlanId", actionPlanId)
         );
     }

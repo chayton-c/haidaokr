@@ -1,5 +1,6 @@
 package com.yingda.lkj.beans.pojo.actionplan;
 
+import com.yingda.lkj.beans.Constant;
 import com.yingda.lkj.beans.entity.backstage.actionplan.ActionPlanPrimaryNode;
 import com.yingda.lkj.beans.entity.backstage.actionplan.ActionPlanSecondaryNode;
 import com.yingda.lkj.utils.StreamUtil;
@@ -13,6 +14,7 @@ public class ActionPlanTreeNode {
     private String id;
     private String name;
 
+    private Byte milestoneNode; // 是里程碑节点
     private String planDescription; // 活动描述
     private String actionInput; // 输入
     private String actionOutput; // 输出（完成标志）
@@ -39,6 +41,7 @@ public class ActionPlanTreeNode {
         this.id = actionPlanPrimaryNode.getId();
         this.key = actionPlanPrimaryNode.getId();
         this.name = actionPlanPrimaryNode.getName();
+        this.milestoneNode = Constant.FALSE;
         this.seq = actionPlanPrimaryNode.getSeq();
         this.children = StreamUtil.getList(actionPlanSecondaryNodes, ActionPlanTreeNode::new);
     }
@@ -47,6 +50,7 @@ public class ActionPlanTreeNode {
         this.key = actionPlanSecondaryNode.getId();
         this.name = actionPlanSecondaryNode.getName();
 
+        this.milestoneNode = actionPlanSecondaryNode.getMilestoneNode();
         this.planDescription = actionPlanSecondaryNode.getPlanDescription();
         this.actionInput = actionPlanSecondaryNode.getActionInput();
         this.actionOutput = actionPlanSecondaryNode.getActionOutput();
@@ -192,17 +196,25 @@ public class ActionPlanTreeNode {
         this.children = children;
     }
 
+    public Byte getMilestoneNode() {
+        return milestoneNode;
+    }
+
+    public void setMilestoneNode(Byte milestoneNode) {
+        this.milestoneNode = milestoneNode;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ActionPlanTreeNode that = (ActionPlanTreeNode) o;
-        return seq == that.seq && Objects.equals(key, that.key) && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(planDescription, that.planDescription) && Objects.equals(actionInput, that.actionInput) && Objects.equals(actionOutput, that.actionOutput) && Objects.equals(planStartTime, that.planStartTime) && Objects.equals(planEndTime, that.planEndTime) && Objects.equals(principalName, that.principalName) && Objects.equals(checkerName, that.checkerName) && Objects.equals(actualStartTime, that.actualStartTime) && Objects.equals(actualEndTime, that.actualEndTime) && Objects.equals(completionDescription, that.completionDescription) && Objects.equals(finishedStatus, that.finishedStatus) && Objects.equals(children, that.children);
+        return seq == that.seq && Objects.equals(key, that.key) && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(milestoneNode, that.milestoneNode) && Objects.equals(planDescription, that.planDescription) && Objects.equals(actionInput, that.actionInput) && Objects.equals(actionOutput, that.actionOutput) && Objects.equals(planStartTime, that.planStartTime) && Objects.equals(planEndTime, that.planEndTime) && Objects.equals(principalName, that.principalName) && Objects.equals(checkerName, that.checkerName) && Objects.equals(actualStartTime, that.actualStartTime) && Objects.equals(actualEndTime, that.actualEndTime) && Objects.equals(completionDescription, that.completionDescription) && Objects.equals(finishedStatus, that.finishedStatus) && Objects.equals(children, that.children);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(key, id, name, planDescription, actionInput, actionOutput, planStartTime, planEndTime, seq, principalName,
-                checkerName, actualStartTime, actualEndTime, completionDescription, finishedStatus, children);
+        return Objects.hash(key, id, name, milestoneNode, planDescription, actionInput, actionOutput, planStartTime, planEndTime, seq,
+                principalName, checkerName, actualStartTime, actualEndTime, completionDescription, finishedStatus, children);
     }
 }

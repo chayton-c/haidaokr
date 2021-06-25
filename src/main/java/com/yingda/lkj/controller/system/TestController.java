@@ -101,7 +101,8 @@ public class TestController extends BaseController {
     @RequestMapping("/a")
     @ResponseBody
     public Json a() throws Exception {
-        EnterpriseWeChatClient.testttttt();
+        EnterpriseWeChatClient.sendLink();
+//        EnterpriseWeChatClient.testttttt();
         return new Json(JsonMessage.SUCCESS);
     }
 
