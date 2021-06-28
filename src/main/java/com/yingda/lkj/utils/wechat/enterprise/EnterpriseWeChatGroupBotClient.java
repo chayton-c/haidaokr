@@ -16,7 +16,7 @@ public class EnterpriseWeChatGroupBotClient {
                             {
                                 "title" : "销售目标填写",
                                 "description" : "销售目标填写",
-                                "url" : "http://192.168.103.144:4200/#/sales-target/detail",
+                                "url" : "http://192.168.105.144:4200/#/sales-target/detail",
                                 "picurl" : "https://img0.baidu.com/it/u=3331104553,1408483350&fm=11&fmt=auto&gp=0.jpg"
                             }
                          ]

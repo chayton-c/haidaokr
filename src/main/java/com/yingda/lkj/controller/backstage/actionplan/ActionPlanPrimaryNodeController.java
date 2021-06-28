@@ -9,11 +9,13 @@ import com.yingda.lkj.beans.system.JsonMessage;
 import com.yingda.lkj.controller.BaseController;
 import com.yingda.lkj.service.backstage.actionplan.ActionPlanPrimaryNodeService;
 import com.yingda.lkj.service.backstage.actionplan.ActionPlanSecondaryNodeService;
+import com.yingda.lkj.service.backstage.actionplan.ActionPlanService;
 import com.yingda.lkj.service.base.BaseService;
 import com.yingda.lkj.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -31,6 +33,8 @@ public class ActionPlanPrimaryNodeController extends BaseController {
     private ActionPlanPrimaryNodeService actionPlanPrimaryNodeService;
     @Autowired
     private ActionPlanSecondaryNodeService actionPlanSecondaryNodeService;
+    @Autowired
+    private ActionPlanService actionPlanService;
 
     private ActionPlanPrimaryNode pageActionPlanPrimaryNode;
 
@@ -75,6 +79,25 @@ public class ActionPlanPrimaryNodeController extends BaseController {
             actionPlanTreeNodes.add(actionPlanTreeNode);
         }
         attributes.put("actionPlanTreeNodes", actionPlanTreeNodes);
+
+        return new Json(JsonMessage.SUCCESS, attributes);
+    }
+
+    @RequestMapping("/initActionPage")
+    public Json initActionPage() {
+        Map<String, Object> attributes = new HashMap<>();
+
+        String actionPlanId = req.getParameter("actionPlanId");
+        ActionPlan actionPlan = actionPlanService.getById(actionPlanId);
+        attributes.put("actionPlan", actionPlan);
+
+        List<ActionPlanPrimaryNode> actionPlanPrimaryNodes = actionPlanPrimaryNodeService.getByActionPlanId(actionPlanId);
+
+        for (ActionPlanPrimaryNode actionPlanPrimaryNode : actionPlanPrimaryNodes) {
+            List<ActionPlanSecondaryNode> actionPlanSecondaryNodes = actionPlanSecondaryNodeService.getByActionPlanPrimaryNodeId(actionPlanPrimaryNode.getId());
+            actionPlanPrimaryNode.setActionPlanSecondaryNodes(actionPlanSecondaryNodes);
+        }
+        attributes.put("actionPlanPrimaryNodes", actionPlanPrimaryNodes);
 
         return new Json(JsonMessage.SUCCESS, attributes);
     }

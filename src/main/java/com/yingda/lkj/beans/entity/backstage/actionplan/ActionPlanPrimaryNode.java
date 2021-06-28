@@ -2,6 +2,7 @@ package com.yingda.lkj.beans.entity.backstage.actionplan;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -13,6 +14,9 @@ public class ActionPlanPrimaryNode {
     private Timestamp addTime;
     private Timestamp updateTime;
     private String actionPlanId;
+
+    // page fields
+    private List<ActionPlanSecondaryNode> actionPlanSecondaryNodes;
 
     @Id
     @Column(name = "id", nullable = false, length = 36)
@@ -85,5 +89,14 @@ public class ActionPlanPrimaryNode {
 
     public void setActionPlanId(String actionPlanId) {
         this.actionPlanId = actionPlanId;
+    }
+
+    @Transient
+    public List<ActionPlanSecondaryNode> getActionPlanSecondaryNodes() {
+        return actionPlanSecondaryNodes;
+    }
+
+    public void setActionPlanSecondaryNodes(List<ActionPlanSecondaryNode> actionPlanSecondaryNodes) {
+        this.actionPlanSecondaryNodes = actionPlanSecondaryNodes;
     }
 }
