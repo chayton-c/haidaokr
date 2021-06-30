@@ -38,6 +38,20 @@ public class ActionPlanSecondaryNodeService {
         actionPlanSecondaryNodeBaseDao.saveOrUpdate(actionPlanSecondaryNode);
     }
 
+    public void finishedActionPlanSecondaryNode(String actionPlanSecondaryNodeId) {
+        ActionPlanSecondaryNode actionPlanSecondaryNode = getById(actionPlanSecondaryNodeId);
+        actionPlanSecondaryNode.setFinishedStatus(ActionPlanSecondaryNode.FINISHED);
+        actionPlanSecondaryNode.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+        actionPlanSecondaryNodeBaseDao.saveOrUpdate(actionPlanSecondaryNode);
+    }
+
+    public void cancelfinishedActionPlanSecondaryNode(String actionPlanSecondaryNodeId) {
+        ActionPlanSecondaryNode actionPlanSecondaryNode = getById(actionPlanSecondaryNodeId);
+        actionPlanSecondaryNode.setFinishedStatus(ActionPlanSecondaryNode.PENDING_START);
+        actionPlanSecondaryNode.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+        actionPlanSecondaryNodeBaseDao.saveOrUpdate(actionPlanSecondaryNode);
+    }
+
     public int getLastSeq(String actionPlanPrimaryNodeId) {
         List<ActionPlanSecondaryNode> actionPlanSecondaryNodes = getByActionPlanPrimaryNodeId(actionPlanPrimaryNodeId);
         return actionPlanSecondaryNodes.stream().map(ActionPlanSecondaryNode::getSeq).reduce(0, (x, y) -> x > y ? x : y) + 1;

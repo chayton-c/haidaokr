@@ -75,6 +75,20 @@ public class ActionPlanSecondaryNodeController extends BaseController {
         return new Json(JsonMessage.SUCCESS);
     }
 
+    @RequestMapping("/cancelFinishedActionPlanSecondaryNode")
+    public Json cancelfinishedActionPlanSecondaryNode() {
+        String actionPlanSecondaryNodeId = req.getParameter("actionPlanSecondaryNodeId");
+        actionPlanSecondaryNodeService.cancelfinishedActionPlanSecondaryNode(actionPlanSecondaryNodeId);
+        return new Json(JsonMessage.SUCCESS);
+    }
+
+    @RequestMapping("/finishedActionPlanSecondaryNode")
+    public Json finishedActionPlanSecondaryNode() {
+        String actionPlanSecondaryNodeId = req.getParameter("actionPlanSecondaryNodeId");
+        actionPlanSecondaryNodeService.finishedActionPlanSecondaryNode(actionPlanSecondaryNodeId);
+        return new Json(JsonMessage.SUCCESS);
+    }
+
     @ModelAttribute
     public void setPageActionPlanSecondaryNode(ActionPlanSecondaryNode pageActionPlanSecondaryNode) {
         this.pageActionPlanSecondaryNode = pageActionPlanSecondaryNode;

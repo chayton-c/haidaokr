@@ -7,6 +7,12 @@ import java.util.Objects;
 @Entity
 @Table(name = "action_plan_secondary_node", schema = "okr_haida", catalog = "")
 public class ActionPlanSecondaryNode {
+
+    // finishedStatus
+    public static final byte PENDING_START = 0;
+    public static final byte PROCESSING = 1;
+    public static final byte FINISHED = 2;
+
     private String id;
     private String actionPlanId;
     private String actionPlanPrimaryNodeId;
