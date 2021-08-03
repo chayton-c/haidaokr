@@ -1,0 +1,32 @@
+<xml>
+    <ToUserName><![CDATA[wwe591ecb89c96c931]]></ToUserName>
+    <FromUserName><![CDATA[sys]]></FromUserName>
+    <CreateTime>1627144115</CreateTime>
+    <MsgType><![CDATA[event]]></MsgType>
+    <Event><![CDATA[sys_approval_change]]></Event>
+    <AgentID>3010040</AgentID>
+    <ApprovalInfo>
+        <SpNo>202107210001</SpNo>
+        <SpName><![CDATA[人事部测试]]></SpName>
+        <SpStatus>2</SpStatus>
+        <TemplateId><![CDATA[BsAd7RgnxsRCht1dKCvHNeSgYvAL78NeFfLkhMAMh]]></TemplateId>
+        <ApplyTime>1626856364</ApplyTime>
+        <Applyer>
+            <UserId><![CDATA[SunZan]]></UserId>
+            <Party><![CDATA[3]]></Party>
+        </Applyer>
+        <SpRecord>
+            <SpStatus>2</SpStatus>
+            <ApproverAttr>1</ApproverAttr>
+            <Details>
+                <Approver>
+                    <UserId><![CDATA[SunZan]]></UserId>
+                </Approver>
+                <Speech><![CDATA[]]></Speech>
+                <SpStatus>2</SpStatus>
+                <SpTime>1627144115</SpTime>
+            </Details>
+        </SpRecord>
+        <StatuChangeEvent>2</StatuChangeEvent>
+    </ApprovalInfo>
+</xml>

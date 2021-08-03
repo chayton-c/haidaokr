@@ -76,7 +76,7 @@ public class ActionPlanSecondaryNodeController extends BaseController {
     }
 
     @RequestMapping("/cancelFinishedActionPlanSecondaryNode")
-    public Json cancelfinishedActionPlanSecondaryNode() {
+    public Json cancelFinishedActionPlanSecondaryNode() {
         String actionPlanSecondaryNodeId = req.getParameter("actionPlanSecondaryNodeId");
         actionPlanSecondaryNodeService.cancelfinishedActionPlanSecondaryNode(actionPlanSecondaryNodeId);
         return new Json(JsonMessage.SUCCESS);

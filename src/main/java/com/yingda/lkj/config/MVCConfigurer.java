@@ -84,10 +84,12 @@ public class MVCConfigurer implements WebMvcConfigurer {
             "/assets/**", // 静态资源
             "/error/**", // 错误页
             "/css/**", // 静态资源
-            "/weChat/**", // 微信服务器推送
+            "/callback/**", // 外部回调
             UploadUtil.RESOURCES_URL + "/**", //
             "/uploadimg/**", //
             "/app/**",
+            "/wechat/**", // 微信校验等
+            "/mobile/**", // 不需要登录的手机页面
             "/fonts/**",
             "/images/**",
             "/js/**",

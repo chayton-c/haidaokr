@@ -23,7 +23,6 @@ public class I18NController extends BaseController {
     @RequestMapping("")
     @ResponseBody
     public Map<String, String> i18N() {
-        Map<String, String> cn = i18NService.getCN();
-        return cn;
+        return i18NService.getCN();
     }
 }

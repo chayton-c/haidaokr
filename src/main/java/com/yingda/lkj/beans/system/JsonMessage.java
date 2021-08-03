@@ -43,13 +43,17 @@ public enum JsonMessage {
      */
     LICENSING_ERROR(false, 5006, "授权错误", "软件授权错误，请联系管理员"),
     /**
-     * 外部接口错误
+     * 数据重复
      */
     DUPLICATE_DATA(false, 5007, "数据重复", "输入的数据已存在"),
     /**
-     * 外部接口错误
+     * 包含关联数据
      */
-    CONTAINING_ASSOCIATED_DATA(false, 5008, "包含关联数据", "包含关联数据");
+    CONTAINING_ASSOCIATED_DATA(false, 5008, "包含关联数据", "包含关联数据"),
+    /**
+     * 微信的问题
+     */
+    WX_WDNMD(false, 5009, "检测到微信服务器异常，请稍后再试", "检测到微信服务器异常，请稍后再试");
 
     public static void main(String[] args) {
     }

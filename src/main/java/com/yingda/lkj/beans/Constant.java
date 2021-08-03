@@ -5,6 +5,8 @@ package com.yingda.lkj.beans;
  */
 public class Constant {
 
+    public static final String DOMAIN = "http://123.56.165.86:4200";
+
     // hide 字段的 显示 / 隐藏
     public static final Byte SHOW = 0;
     public static final Byte HIDE = 1;

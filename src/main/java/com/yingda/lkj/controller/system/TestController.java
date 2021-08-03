@@ -1,16 +1,20 @@
 package com.yingda.lkj.controller.system;
 
 import com.alibaba.fastjson.JSON;
+import com.yingda.lkj.beans.entity.backstage.approve.ApproveDetail;
 import com.yingda.lkj.beans.entity.backstage.line.RailwayLineSection;
 import com.yingda.lkj.beans.entity.backstage.line.StationRailwayLine;
 import com.yingda.lkj.beans.entity.backstage.location.Location;
 import com.yingda.lkj.beans.entity.backstage.opc.Opc;
 import com.yingda.lkj.beans.entity.backstage.opc.OpcMark;
 import com.yingda.lkj.beans.entity.backstage.opc.OpcMarkType;
+import com.yingda.lkj.beans.exception.CustomException;
+import com.yingda.lkj.beans.pojo.enterprisewechat.approve.ApproveDetailResponse;
 import com.yingda.lkj.beans.pojo.opc.OpcStatistics;
 import com.yingda.lkj.beans.system.Json;
 import com.yingda.lkj.beans.system.JsonMessage;
 import com.yingda.lkj.controller.BaseController;
+import com.yingda.lkj.service.backstage.approve.ApproveDetailService;
 import com.yingda.lkj.service.backstage.constructioncontrolplan.ConstructionControlPlanService;
 import com.yingda.lkj.service.backstage.equipment.EquipmentService;
 import com.yingda.lkj.service.backstage.line.RailwayLineService;
@@ -22,16 +26,17 @@ import com.yingda.lkj.service.backstage.opc.OpcService;
 import com.yingda.lkj.service.backstage.opc.OpcTypeService;
 import com.yingda.lkj.service.backstage.organization.OrganizationClientService;
 import com.yingda.lkj.service.backstage.sms.SmsService;
+import com.yingda.lkj.service.backstage.wechat.EnterpriseWechatDepartmentService;
 import com.yingda.lkj.service.base.BaseService;
 import com.yingda.lkj.service.system.AuthService;
 import com.yingda.lkj.service.system.MenuService;
 import com.yingda.lkj.service.system.RoleService;
 import com.yingda.lkj.service.system.UserService;
-import com.yingda.lkj.utils.SpringContextUtil;
 import com.yingda.lkj.utils.StringUtils;
 import com.yingda.lkj.utils.date.DateUtil;
 import com.yingda.lkj.utils.location.LocationUtil;
 import com.yingda.lkj.utils.map.GeoJsonUtil;
+import com.yingda.lkj.utils.wechat.enterprise.EnterpriseWeChatApproveClient;
 import com.yingda.lkj.utils.wechat.enterprise.EnterpriseWeChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -96,13 +101,36 @@ public class TestController extends BaseController {
         return new Json(JsonMessage.SUCCESS);
     }
 
+    @Autowired
+    private EnterpriseWechatDepartmentService enterpriseWechatDepartmentService;
 
+    @Autowired
+    private ApproveDetailService approveDetailService;
 
-    @RequestMapping("/a")
+    @RequestMapping("/loadAndSave")
     @ResponseBody
-    public Json a() throws Exception {
-        EnterpriseWeChatClient.sendLink();
-//        EnterpriseWeChatClient.testttttt();
+    public Json loadAndSave() throws CustomException {
+
+        List<String> approveNumbers = EnterpriseWeChatApproveClient.getApproveNumbers("3TmmtPkXyxPbZBmZTqU8hCcpZPNP2BF7zoYCFanY");
+        List<String> approveNumbers1 = EnterpriseWeChatApproveClient.getApproveNumbers("3TmmtRULMLFkivxjfMvAVm7aWVmAZtmos3rSm7Hr");
+        approveNumbers.addAll(approveNumbers1);
+
+        for (String spNo : approveNumbers) {
+            ApproveDetail approveDetail = approveDetailService.getByCode(spNo + "");
+            if (approveDetail != null)
+                continue;
+
+            ApproveDetailResponse approveDetailResponse = EnterpriseWeChatApproveClient.getApproveDetail(spNo + "");
+            String sp_status = approveDetailResponse.getInfo().getSp_status();
+
+            if (sp_status.equals("2")) {
+                System.out.println("完成的：" + spNo);
+
+                List<ApproveDetail> approveDetails = ApproveDetail.fillByResponse(approveDetailResponse);
+                approveDetailService.saveOrUpdate(approveDetails);
+            }
+        }
+
         return new Json(JsonMessage.SUCCESS);
     }
 
