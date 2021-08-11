@@ -60,9 +60,9 @@ public class ApproveDetail {
 
             switch (titleStr) {
                 case "发生日期" -> occurrenceTimeValue = content.getValue();
-                case "申请事由", "奖罚所依据的制度规范" -> reasonValue = content.getValue();
-                case "备注", "奖罚内容描述" -> remarkValue = content.getValue();
-                case "奖罚明细" -> tableValue = content.getValue();
+                case "申请事由", "奖罚所依据的制度规范", "奖励所依据的制度规范", "处罚所依据的制度规范" -> reasonValue = content.getValue();
+                case "备注", "奖罚内容描述", "奖励内容描述", "处罚内容描述" -> remarkValue = content.getValue();
+                case "奖罚明细","奖励明细","处罚明细" -> tableValue = content.getValue();
             }
         }
 

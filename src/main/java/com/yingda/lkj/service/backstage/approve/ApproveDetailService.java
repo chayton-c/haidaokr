@@ -49,7 +49,7 @@ public class ApproveDetailService {
         }
 
         approveDetailBaseDao.bulkInsert(approveDetails);
-        sendRewardMessage(approveDetails);
+//        sendRewardMessage(approveDetails);
     }
 
     public ApproveDetail getByCode(String code) {

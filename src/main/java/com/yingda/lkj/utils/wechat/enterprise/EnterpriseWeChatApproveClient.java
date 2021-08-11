@@ -113,6 +113,7 @@ public class EnterpriseWeChatApproveClient {
     }
 
     public static void main(String[] args) throws CustomException {
+        getAccessTemplateDetail("3TmmtRULMLFkivxjfMvAVm7aWVmAZtmos3rSm7Hr");
     }
 
     private static class ApproveNoResponse {

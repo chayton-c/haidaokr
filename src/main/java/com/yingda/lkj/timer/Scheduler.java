@@ -1,10 +1,14 @@
 package com.yingda.lkj.timer;
 
 import com.sun.istack.Nullable;
-import com.yingda.lkj.service.backstage.constructioncontrolplan.ConstructionControlPlanService;
-import com.yingda.lkj.service.backstage.constructioncontrolplan.ConstructionDailyPlanService;
+import com.yingda.lkj.beans.entity.backstage.wechat.EnterpriseWechatDepartment;
+import com.yingda.lkj.beans.exception.CustomException;
+import com.yingda.lkj.service.backstage.wechat.EnterpriseWechatDepartmentService;
+import com.yingda.lkj.service.backstage.wechat.WeChatUserService;
 import com.yingda.lkj.socket.ConstructionDailyPlanWebSocket;
 import com.yingda.lkj.utils.SpringContextUtil;
+import com.yingda.lkj.utils.wechat.enterprise.EnterpriseWeChatUserClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.TaskScheduler;
@@ -13,11 +17,17 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
+ * 定时器
+ * 附：cron生成器
+ * https://cron.qqe2.com/
  * @author hood  2020/4/7
  */
 @Component
 @EnableScheduling
+@Slf4j
 public class Scheduler {
 
     @Autowired
@@ -41,23 +51,19 @@ public class Scheduler {
      * <p>开始/结束日计划</p>
      * <p>每五分钟</p>
      */
-    @Scheduled(cron = "0 0/5 * * * ?")
-    public void checkConstructionDailyPlan() {
-        ConstructionDailyPlanService constructionDailyPlanService = (ConstructionDailyPlanService) SpringContextUtil.getBean("constructionDailyPlanService");
-        constructionDailyPlanService.checkFinishedStatus();
-
-        // 每五分钟通知前端刷新
-        constructionDailyPlanWebSocket.sendMessage("refresh");
-    }
-
-    /**
-     * <p>关闭方案</p>
-     * <p>每小时执行</p>
-     */
-    @Scheduled(cron = "0 0 * * * ?")
-    public void closeConstructionControlPlan() {
-        ConstructionControlPlanService constructionControlPlanService = (ConstructionControlPlanService) SpringContextUtil.getBean("constructionControlPlanService");
-        constructionControlPlanService.checkClose();
+    @Scheduled(cron = "0 0 2 * * ? ")
+    public void updateEnterpriseWechatDepartmentAndWechatUser() {
+        try {
+            EnterpriseWechatDepartmentService enterpriseWechatDepartmentService = (EnterpriseWechatDepartmentService) SpringContextUtil.getBean("enterpriseWechatDepartmentService");
+            List<EnterpriseWechatDepartment> enterpriseWechatDepartments = enterpriseWechatDepartmentService.loadAndSaveFromWechat();
+            WeChatUserService weChatUserService = (WeChatUserService) SpringContextUtil.getBean("weChatUserService");
+            for (EnterpriseWechatDepartment enterpriseWechatDepartment : enterpriseWechatDepartments) {
+                List<String> userIds = EnterpriseWeChatUserClient.getUserIdsByDepartmentId(enterpriseWechatDepartment.getId());
+                weChatUserService.saveByUserIdsFromWechat(userIds);
+            }
+        } catch (CustomException customException) {
+            log.error("updateEnterpriseWechatDepartmentAndWechatUser", customException);
+        }
     }
 
 }

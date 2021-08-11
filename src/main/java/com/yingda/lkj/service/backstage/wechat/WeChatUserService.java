@@ -8,6 +8,9 @@ import com.yingda.lkj.utils.wechat.enterprise.EnterpriseWeChatUserClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 @Service("weChatUserService")
 public class WeChatUserService {
 
@@ -20,13 +23,30 @@ public class WeChatUserService {
     public WeChatUser getById(String id) throws CustomException {
         WeChatUser weChatUser = weChatUserBaseDao.get(WeChatUser.class, id);
         if (weChatUser == null)
-            weChatUser = getByWeChat(id);
+            weChatUser = getByUserIdFromWechat(id);
 
         return weChatUser;
     }
 
-    private WeChatUser getByWeChat(String id) throws CustomException {
-        WeChatUserResponse weChatUserResponse = EnterpriseWeChatUserClient.getApproveDetail(id);
+    public List<WeChatUser> getByDepartmentId(String departmentId) {
+        return weChatUserBaseDao.find(
+                "from WeChatUser where departmentId = :departmentId",
+                Map.of("departmentId", departmentId)
+        );
+    }
+
+    public void saveByUserIdsFromWechat(List<String> userIds) throws CustomException {
+        for (String userId : userIds) {
+            getByUserIdFromWechat(userId);
+        }
+    }
+
+    public List<WeChatUser> showdown() {
+        return weChatUserBaseDao.find("from WeChatUser");
+    }
+
+    private WeChatUser getByUserIdFromWechat(String id) throws CustomException {
+        WeChatUserResponse weChatUserResponse = EnterpriseWeChatUserClient.getUserDetail(id);
         WeChatUser weChatUser = WeChatUser.createByResponse(weChatUserResponse);
         weChatUserBaseDao.saveOrUpdate(weChatUser);
         return weChatUser;

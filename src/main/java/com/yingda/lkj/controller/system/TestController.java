@@ -1,15 +1,16 @@
 package com.yingda.lkj.controller.system;
 
 import com.alibaba.fastjson.JSON;
-import com.yingda.lkj.beans.entity.backstage.approve.ApproveDetail;
 import com.yingda.lkj.beans.entity.backstage.line.RailwayLineSection;
 import com.yingda.lkj.beans.entity.backstage.line.StationRailwayLine;
 import com.yingda.lkj.beans.entity.backstage.location.Location;
 import com.yingda.lkj.beans.entity.backstage.opc.Opc;
 import com.yingda.lkj.beans.entity.backstage.opc.OpcMark;
 import com.yingda.lkj.beans.entity.backstage.opc.OpcMarkType;
+import com.yingda.lkj.beans.entity.backstage.wechat.EnterpriseWechatDepartment;
+import com.yingda.lkj.beans.entity.backstage.wechat.WeChatUser;
 import com.yingda.lkj.beans.exception.CustomException;
-import com.yingda.lkj.beans.pojo.enterprisewechat.approve.ApproveDetailResponse;
+import com.yingda.lkj.beans.pojo.enterprisewechat.department.WechatDepartmentAndUserTreeNode;
 import com.yingda.lkj.beans.pojo.opc.OpcStatistics;
 import com.yingda.lkj.beans.system.Json;
 import com.yingda.lkj.beans.system.JsonMessage;
@@ -27,17 +28,18 @@ import com.yingda.lkj.service.backstage.opc.OpcTypeService;
 import com.yingda.lkj.service.backstage.organization.OrganizationClientService;
 import com.yingda.lkj.service.backstage.sms.SmsService;
 import com.yingda.lkj.service.backstage.wechat.EnterpriseWechatDepartmentService;
+import com.yingda.lkj.service.backstage.wechat.WeChatUserService;
 import com.yingda.lkj.service.base.BaseService;
 import com.yingda.lkj.service.system.AuthService;
 import com.yingda.lkj.service.system.MenuService;
 import com.yingda.lkj.service.system.RoleService;
 import com.yingda.lkj.service.system.UserService;
+import com.yingda.lkj.utils.SpringContextUtil;
 import com.yingda.lkj.utils.StringUtils;
 import com.yingda.lkj.utils.date.DateUtil;
 import com.yingda.lkj.utils.location.LocationUtil;
 import com.yingda.lkj.utils.map.GeoJsonUtil;
-import com.yingda.lkj.utils.wechat.enterprise.EnterpriseWeChatApproveClient;
-import com.yingda.lkj.utils.wechat.enterprise.EnterpriseWeChatClient;
+import com.yingda.lkj.utils.wechat.enterprise.EnterpriseWeChatUserClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -103,33 +105,23 @@ public class TestController extends BaseController {
 
     @Autowired
     private EnterpriseWechatDepartmentService enterpriseWechatDepartmentService;
+    @Autowired
+    private WeChatUserService weChatUserService;
 
     @Autowired
     private ApproveDetailService approveDetailService;
 
     @RequestMapping("/loadAndSave")
     @ResponseBody
-    public Json loadAndSave() throws CustomException {
+    public Json loadAndSave() {
+        List<EnterpriseWechatDepartment> enterpriseWechatDepartments = enterpriseWechatDepartmentService.showdown();
+        List<WeChatUser> weChatUsers = weChatUserService.showdown();
 
-        List<String> approveNumbers = EnterpriseWeChatApproveClient.getApproveNumbers("3TmmtPkXyxPbZBmZTqU8hCcpZPNP2BF7zoYCFanY");
-        List<String> approveNumbers1 = EnterpriseWeChatApproveClient.getApproveNumbers("3TmmtRULMLFkivxjfMvAVm7aWVmAZtmos3rSm7Hr");
-        approveNumbers.addAll(approveNumbers1);
+        List<WechatDepartmentAndUserTreeNode> wechatDepartmentAndUserTreeNodes =
+                WechatDepartmentAndUserTreeNode.convertListToTree(List.of(WechatDepartmentAndUserTreeNode.ROOT_NODE),
+                        enterpriseWechatDepartments, weChatUsers);
 
-        for (String spNo : approveNumbers) {
-            ApproveDetail approveDetail = approveDetailService.getByCode(spNo + "");
-            if (approveDetail != null)
-                continue;
-
-            ApproveDetailResponse approveDetailResponse = EnterpriseWeChatApproveClient.getApproveDetail(spNo + "");
-            String sp_status = approveDetailResponse.getInfo().getSp_status();
-
-            if (sp_status.equals("2")) {
-                System.out.println("完成的：" + spNo);
-
-                List<ApproveDetail> approveDetails = ApproveDetail.fillByResponse(approveDetailResponse);
-                approveDetailService.saveOrUpdate(approveDetails);
-            }
-        }
+        System.out.println(wechatDepartmentAndUserTreeNodes);
 
         return new Json(JsonMessage.SUCCESS);
     }
@@ -233,14 +225,14 @@ public class TestController extends BaseController {
 
     @RequestMapping("/set")
     @ResponseBody
-    public String HelloSpring (String key,String value){
-        redisTemplate.opsForValue().set(key,value);
-        return String.format("redis set成功！key=%s,value=%s",key,value);
+    public String HelloSpring(String key, String value) {
+        redisTemplate.opsForValue().set(key, value);
+        return String.format("redis set成功！key=%s,value=%s", key, value);
     }
 
     @RequestMapping("/get")
     @ResponseBody
-    public String HelloSpring (String key){
+    public String HelloSpring(String key) {
         String value = (String) redisTemplate.opsForValue().get(key);
         return "redis get结果 value=" + value;
     }
@@ -344,6 +336,7 @@ public class TestController extends BaseController {
         attributes.put("opcStatistics", opcStatistics);
         return new Json(JsonMessage.SUCCESS, attributes);
     }
+
     public static void main(String[] args) throws IOException {
     }
 

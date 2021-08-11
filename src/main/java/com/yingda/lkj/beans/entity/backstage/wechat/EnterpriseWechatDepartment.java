@@ -9,6 +9,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "enterprise_wechat_department", schema = "okr_haida")
 public class EnterpriseWechatDepartment {
+
+    public static final String ROOT_DEPARTMENT_ID = "0";
+
     private String id;
     private String parentId;
     private String name;
@@ -99,11 +102,11 @@ public class EnterpriseWechatDepartment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EnterpriseWechatDepartment that = (EnterpriseWechatDepartment) o;
-        return Objects.equals(id, that.id) && Objects.equals(parentId, that.parentId) && Objects.equals(name, that.name) && Objects.equals(addTime, that.addTime) && Objects.equals(updateTime, that.updateTime) && Objects.equals(seq, that.seq);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, parentId, name, seq, addTime, updateTime);
+        return Objects.hash(id);
     }
 }

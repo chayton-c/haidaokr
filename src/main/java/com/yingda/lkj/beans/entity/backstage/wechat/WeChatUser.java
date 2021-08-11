@@ -115,12 +115,12 @@ public class WeChatUser {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WeChatUser that = (WeChatUser) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(position, that.position) && Objects.equals(avatar, that.avatar) && Objects.equals(mobile, that.mobile) && Objects.equals(addTime, that.addTime) && Objects.equals(updateTime, that.updateTime);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, position, avatar, mobile, addTime, updateTime);
+        return Objects.hash(id);
     }
 
     @Basic

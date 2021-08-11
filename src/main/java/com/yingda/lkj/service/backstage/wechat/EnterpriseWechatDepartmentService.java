@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service("enterpriseWechatDepartmentService")
 public class EnterpriseWechatDepartmentService {
@@ -17,14 +18,27 @@ public class EnterpriseWechatDepartmentService {
     @Autowired
     private BaseDao<EnterpriseWechatDepartment> enterpriseWechatDepartmentBaseDao;
 
-    public void saveOrUpdate(EnterpriseWechatDepartment enterpriseWechatDepartment) {
-        enterpriseWechatDepartmentBaseDao.saveOrUpdate(enterpriseWechatDepartment);
+    public List<EnterpriseWechatDepartment> getByParentId(String parentId) {
+        return enterpriseWechatDepartmentBaseDao.find(
+                "from EnterpriseWechatDepartment where parentId = :parentId",
+                Map.of("parentId", parentId)
+        );
     }
 
-    public void loadAndSave() throws CustomException {
+    public List<EnterpriseWechatDepartment> showdown() {
+        return enterpriseWechatDepartmentBaseDao.find("from EnterpriseWechatDepartment");
+    }
+
+    /**
+     * 更新部门
+     * @return
+     * @throws CustomException
+     */
+    public List<EnterpriseWechatDepartment> loadAndSaveFromWechat() throws CustomException {
         List<EnterpriseWechatDepartmentResponse> enterpriseWechatDepartmentResponses = EnterpriseWeChatDepartmentClient.loadDepartments();
         List<EnterpriseWechatDepartment> enterpriseWechatDepartments = StreamUtil.getList(enterpriseWechatDepartmentResponses, EnterpriseWechatDepartment::createFromWechatResponse);
         enterpriseWechatDepartmentBaseDao.bulkInsert(enterpriseWechatDepartments);
+        return enterpriseWechatDepartments;
     }
 
 
